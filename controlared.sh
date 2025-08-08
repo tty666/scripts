@@ -11,7 +11,7 @@
 ruta=$HOME/controlared
 #es un simple if para saber si existe o no la carpeta
 if [ ! -d $ruta ]; then
-echo "creando la carpeta controlared en el direcotrio home "
+echo "creando la carpeta controlared en el directorio home "
 mkdir $ruta
 #para ver si existe el archivo
 if [ -f $ruta/listablanca.txt ];
