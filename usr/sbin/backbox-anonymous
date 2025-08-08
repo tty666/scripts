@@ -4,7 +4,7 @@
 #
 # This script is intended to set up your BackBox machine to guarantee 
 # anonymity through Tor. Additionally, the script takes further steps to 
-# guarantee prevantion of data leakage by killing dangerous processes,
+# guarantee prevention of data leakage by killing dangerous processes,
 # changing MAC address and IP information and so on.
 #
 # Author: Raffaele Forte <raffaele@backbox.org>
@@ -38,9 +38,9 @@ if [ -f /etc/default/backbox-anonymous ] ; then
 fi
 
 warning() {
-	echo "\n[!] WARNING! It's a simple script that avoid the most common system data"
-	echo "    leaks. Your coumputer behaviour is the key to guarantee you a strong"
-	echo "    privacy protection and a good anonimate."
+        echo "\n[!] WARNING! It's a simple script that avoids the most common system data"
+        echo "    leaks. Your computer behaviour is the key to guaranteeing you strong"
+        echo "    privacy protection and good anonymity."
 	
 	echo "\n[i] Please edit /etc/default/backbox-anonymous with your custom values."
 }
