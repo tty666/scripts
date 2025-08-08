@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 unahoramenos=`date +%R --date='-1 hours'`
 horaactual=`date +%R`
 lastb -s $unahoramenos -t $horaactual | grep root > /tmp/loginfailsroot.txt
