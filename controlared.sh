@@ -55,23 +55,26 @@ hostmac=`head -$i $ruta/host.txt | tail -1 | cut -c 1-17`
 #guardo en otra variable la ip de los hosts
 hostip=`head -$i $ruta/ip.txt | tail -1 | cut -c 1-15`
 #Tengo una lista blanca de MAC permitidas de la cual debo buscarlas 
-busca=`grep -ic "$hostmac" $ruta/listablanca.txt`
-#Si la variable busca es igual a cero significa que es un intruso
-if [ $busca == 0 ];then
-#Cambio la bandera porque debo mandar el mail para notificar
-bandera=1
-#Extraigo info del intruso y lo guardo en un txt
-echo $hostmac | nmap -v -A -O $hostip >> $ruta/infointruso.txt
-echo "Se encontro un intruso con MAC Address: "$hostmac "IP: "$hostip
+busca="$(grep -ic "$hostmac" "$ruta/listablanca.txt")"
+# Si la variable busca es igual a cero significa que es un intruso
+if [ "$busca" -eq 0 ]; then
+    # Cambio la bandera porque debo mandar el mail para notificar
+    bandera=1
+    # Extraigo info del intruso y lo guardo en un txt junto con la MAC
+    {
+        echo "MAC: $hostmac IP: $hostip"
+        nmap -v -A -O "$hostip"
+    } >> "$ruta/infointruso.txt"
+    echo "Se encontro un intruso con MAC Address: $hostmac IP: $hostip"
 #fin if
 fi
 #fin for
 done
 #Acá pregunto si la bandera es igual a uno pues significa que hay intruso
-if [ $bandera == 1 ];then
-#mando el mail con el archivo adjunto con la información extraida de los mismos
-echo "Se conecto algún/os intruso/s en la red" | mutt -s "ACCESO A LA RED" -a $ruta/infointruso.txt -- sergiosysforence@hotmail.com.ar
-#borro el archivo con la info para que la proxima ves no se siga agregando info repetida
-rm -rf $ruta/infointruso.txt
+if [ "$bandera" -eq 1 ]; then
+    # mando el mail con el archivo adjunto con la información extraida de los mismos
+    echo "Se conecto algún/os intruso/s en la red" | mutt -s "ACCESO A LA RED" -a "$ruta/infointruso.txt" -- sergiosysforence@hotmail.com.ar
+# borro el archivo con la info para que la proxima ves no se siga agregando info repetida
+    rm -rf "$ruta/infointruso.txt"
 fi
 echo ---------Fin del script-------------
