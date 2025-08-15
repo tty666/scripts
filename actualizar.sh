@@ -1,8 +1,24 @@
 #!/bin/bash
 # -*- ENCODING: UTF-8 -*-
-sudo dnf update -y > /tmp/update.txt
+# Ejecuta "dnf update" y guarda un backup del log.
+# El primer parámetro permite especificar la cantidad de días a conservar backups (por defecto 7).
+
+retention_days=${1:-7}
+logfile="/tmp/update.txt"
+backupdir="/backupsscripts/backups_comandoupdate"
 fechahoy=$(date +"%d-%m-%Y")
-tar -zcvf backupsupdate.$fechahoy.tar.gz /tmp/update.txt
-cp backupsupdate.$fechahoy.tar.gz /backupsscripts/backups_comandoupdate
-rm -rf backupsupdate.$fechahoy.tar.gz
-rm -rf /tmp/update.txt
+
+# Ejecuta actualización y guarda el log
+sudo dnf update -y > "$logfile"
+
+# Crea backup comprimido del log
+archivo="backupsupdate.$fechahoy.tar.gz"
+tar -zcvf "$archivo" "$logfile"
+cp "$archivo" "$backupdir"
+rm -f "$archivo" "$logfile"
+
+# Limpia backups antiguos
+find "$backupdir" -type f -name "backupsupdate.*.tar.gz" -mtime +"$retention_days" -print -delete
+
+echo "Backup almacenado en $backupdir"
+echo "Se eliminarán backups con más de $retention_days días"
