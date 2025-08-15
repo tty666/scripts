@@ -1,2 +1,2 @@
 # scripts
-todo tipo de script útiles para linux
+All kinds of useful scripts for Linux
